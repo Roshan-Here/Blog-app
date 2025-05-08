@@ -15,6 +15,19 @@ dotenv.config();
 const app = express();
 const httpServer = http.createServer(app);
 
+const corsOptions = {
+  origin: [
+    'https://blog-appv1.vercel.app',
+    // 'http://localhost:3000' 
+  ],
+  credentials: true, 
+  methods: ['GET', 'POST', 'OPTIONS'], 
+  allowedHeaders: ['Content-Type', 'Authorization'] 
+};
+
+app.use(cors(corsOptions));
+app.use(express.json());
+
 connectDb();
 
 async function startApolloServer() {
@@ -28,8 +41,6 @@ async function startApolloServer() {
   
   app.use(
     "/graphql", 
-    cors(), 
-    express.json(), 
     expressMiddleware(server)
   );
   
