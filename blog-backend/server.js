@@ -7,11 +7,10 @@ import connectDb from "./utils/db.js";
 import { resolvers } from "./graphql/resolvers.js";
 import { typeDefs } from "./graphql/schema.js";
 import { expressMiddleware } from "@apollo/server/express4";
-
-dotenv.config();
-
 import { ApolloServer } from "@apollo/server";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+
+dotenv.config();
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -24,13 +23,21 @@ async function startApolloServer() {
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
-
+  
   await server.start();
-
-  app.use("/graphql", cors(), express.json(), expressMiddleware(server));
-
-
-  const PORT = process.env.PORT || 5000;
+  
+  app.use(
+    "/graphql", 
+    cors(), 
+    express.json(), 
+    expressMiddleware(server)
+  );
+  
+  app.get("/", (req, res) => {
+    res.send("GraphQL API is running. Navigate to /graphql to use the GraphQL playground.");
+  });
+  
+  const PORT = process.env.PORT || 3000;
   
   await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
   
@@ -38,3 +45,5 @@ async function startApolloServer() {
 }
 
 startApolloServer();
+
+export default app;
