@@ -15,7 +15,7 @@ dotenv.config();
 const app = express();
 const httpServer = http.createServer(app);
 
-const dbsetup = connectDb();
+connectDb();
 
 async function startApolloServer() {
   const server = new ApolloServer({
@@ -34,7 +34,7 @@ async function startApolloServer() {
   );
   
   app.get("/", (req, res) => {
-    res.send("GraphQL API is running. Navigate to /graphql to use the GraphQL playground.", dbsetup);
+    res.send("GraphQL API is running. Navigate to /graphql to use the GraphQL playground.");
   });
   
   const PORT = process.env.PORT || 3000;
