@@ -32,3 +32,28 @@ export const fetchBlogs = async (): Promise<BlogsResponse> => {
       throw error
     }
   }
+
+  export const fetchBlogById = async (id: string): Promise<BlogDetailResponse> => {
+    try {
+      const response = await axios.post<BlogDetailResponse>(`${API_URL}/graphql`,
+        {
+            query: `
+                query($id: ID!) { blog(id: $id) { title author content } }
+            `,
+            "variables": {
+                "id": `${id}`
+              }
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+
+      )
+      return response.data
+    } catch (error) {
+      console.error(`Error fetching blog with ID ${id}:`, error)
+      throw error
+    }
+  }
