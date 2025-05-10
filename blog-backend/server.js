@@ -18,7 +18,7 @@ const httpServer = http.createServer(app);
 const corsOptions = {
   origin: [
     'https://blog-appv1.vercel.app',
-    // 'http://localhost:3000' 
+    'http://localhost:3000' 
   ],
   credentials: true, 
   methods: ['GET', 'POST', 'OPTIONS'], 

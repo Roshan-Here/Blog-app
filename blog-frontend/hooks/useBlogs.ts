@@ -10,20 +10,30 @@ export const useBlogs = () => {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    let retryCount = 0
+    const maxRetries = 5
+    const retryDelay = 3000 // 3 seconds
+
     const getBlogs = async () => {
       try {
         setIsLoading(true)
         const response = await fetchBlogs()
+
         const sortedBlogs = response.data.blogs.sort(
           (a, b) => Number.parseInt(b.createdAt) - Number.parseInt(a.createdAt),
         )
 
         setBlogs(sortedBlogs)
         setError(null)
-      } catch (err) {
-        setError("Failed to fetch blogs. Please try again later.")
-      } finally {
         setIsLoading(false)
+      } catch (err) {
+        retryCount++
+        if (retryCount <= maxRetries) {
+          setTimeout(getBlogs, retryDelay)
+        } else {
+          setError("Failed to fetch blogs after several attempts.")
+          setIsLoading(false)
+        }
       }
     }
 

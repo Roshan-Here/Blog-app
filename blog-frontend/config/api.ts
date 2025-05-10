@@ -2,6 +2,7 @@ import axios from "axios"
 import type {BlogsResponse, BlogDetailResponse} from "./blog.type"
 
 const API_URL = "https://blog-app-woad-two.vercel.app"
+// const API_URL = "http://localhost:5173"
 
 export const fetchBlogs = async (): Promise<BlogsResponse> => {
     try {
